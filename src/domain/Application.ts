@@ -1,6 +1,6 @@
 import { Container, interfaces } from "inversify";
 
-export abstract class BaseApplication {
+abstract class BaseApplication {
     protected container: Container
     constructor(options: interfaces.ContainerOptions) {
         this.container = new Container(options)
@@ -11,3 +11,5 @@ export abstract class BaseApplication {
     abstract configureServices(container: Container): void
     abstract setup(): Promise<void> | void
 }
+
+export default BaseApplication

@@ -1,11 +1,11 @@
 import { Application, json, urlencoded } from "express";
 import { InversifyExpressServer } from "inversify-express-utils";
-import { BaseApplication } from "../domain/Application";
-import { DBContext } from "../infrastructure/database/DBContext";
+import BaseApplication from "../domain/Application";
+import DBContext from "../infrastructure/database/DBContext";
 import MailContext from "../infrastructure/nodemailer/MailContext";
 import UserRepository from "../repository/user.repository";
 import UserService from "../use-case/user.service";
-
+import * as cors from 'cors'
 
 import "./controllers/user.controller";
 class App extends BaseApplication {
@@ -31,6 +31,7 @@ class App extends BaseApplication {
         server.setConfig((app) => {
             app.use(json())
                 .use(urlencoded({ extended: true }))
+                .use(cors())
         })
 
         this.app = server.build()

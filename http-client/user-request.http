@@ -1,20 +1,34 @@
 ###
-GET http://localhost:3030/users
+GET http://localhost:8081/api/users
 
 
 
 
 ###
-POST  http://localhost:3030/users
+POST  http://localhost:8081/api/users
+Content-Type: application/json
+
+{
+    "firstname":"John ",
+    "lastname":"Doe",
+    "email":"example1212@gmail.com",
+    "phone":"+998889898",
+    "password":"1212121221"
+}
+
+
+### 
+PUT  http://localhost:8081/api/users/13
 Content-Type: application/json
 
 {
     "firstname":"asdasd",
     "lastname":"asdasd",
-    "email":"jurayevmansurbek667@gmail.com",
+    "email":"example34@gmail.com",
     "phone":"+998996672106",
     "password":"asdasd"
 }
 
-
-### 
+####
+DELETE http://localhost:8081/api/users/10
+Content-Type: application/json

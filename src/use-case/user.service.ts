@@ -21,6 +21,11 @@ class UserService {
         const result = await this._userRepo.delete(id)
         return result
     }
+
+    async update(id: number, data: User): Promise<User> {
+        const result = await this._userRepo.update(id, data)
+        return result
+    }
     async changePassword(id: number) {
 
     }

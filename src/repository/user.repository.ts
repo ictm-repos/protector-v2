@@ -1,6 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
 import { injectable } from "inversify";
-import { DBContext } from "../infrastructure/database/DBContext";
+import DBContext from "../infrastructure/database/DBContext";
 
 @injectable()
 class UserRepository {
@@ -26,7 +26,16 @@ class UserRepository {
         })
         return deleted
     }
+    async update(id: number, data: User): Promise<User> {
+        const updated = await this._dbContext.user.update({
+            data,
+            where: {
+                id
+            }
+        })
 
+        return updated
+    }
 }
 
 export default UserRepository

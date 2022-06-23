@@ -36,3 +36,12 @@ model Tokens {
   expires      DateTime
   createdAt    DateTime @default(now())
 }
+
+model Video {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  destination String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
