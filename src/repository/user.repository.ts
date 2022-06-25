@@ -1,6 +1,7 @@
 import { PrismaClient, User } from "@prisma/client";
 import { injectable } from "inversify";
 import DBContext from "../infrastructure/database/DBContext";
+import LoginUserDto from "../use-case/dtos/auth/login-user.dto";
 
 @injectable()
 class UserRepository {
@@ -10,9 +11,27 @@ class UserRepository {
         return await this._dbContext.user.findMany()
     }
 
-    async create(data: User): Promise<User> {
+    async getById(id: number): Promise<User> {
+        const user = await this._dbContext.user.findFirst({
+            where: {
+                id
+            }
+        })
+        return user
+    }
+
+    async getByEmail(email: string): Promise<User> {
+        const user = await this._dbContext.user.findFirst({
+            where: {
+                email
+            }
+        })
+        return user
+    }
+
+    async create(entity: Partial<User>): Promise<User> {
         const created = await this._dbContext.user.create({
-            data
+            data: <User>entity
         })
 
         return created

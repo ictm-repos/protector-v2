@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 
-class CreateUserDto {
+class RegisterUserDto {
     // const user: User
     constructor(
         public readonly email: string,
@@ -10,25 +10,15 @@ class CreateUserDto {
         public readonly phone: string
 
     ) {
+        // this.user.
     }
-    static from(body: Partial<CreateUserDto>) {
+    static from(body: Partial<RegisterUserDto>) {
+        console.log(body)
         if (!body.email) {
-            throw new Error("Email is not provided")
+            throw new Error("Email is doesn't exist")
         }
 
-        if (!body.firstname) {
-            throw new Error("Firstname is not provided")
-        }
-
-        if (!body.password) {
-            throw new Error("Password is not provided")
-        }
-
-        if (!body.phone) {
-            throw new Error("Password is not provided")
-        }
-
-        return new CreateUserDto(
+        return new RegisterUserDto(
             body.email,
             body.firstname,
             body.lastname,
@@ -38,4 +28,4 @@ class CreateUserDto {
     }
 }
 
-export default CreateUserDto
+export default RegisterUserDto
