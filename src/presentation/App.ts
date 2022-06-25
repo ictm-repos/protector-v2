@@ -1,5 +1,5 @@
-import { Application, json, urlencoded } from "express";
-import { InversifyExpressServer } from "inversify-express-utils";
+import { Application, json, NextFunction, Request, Response, urlencoded } from "express";
+import { InversifyExpressServer, next } from "inversify-express-utils";
 import BaseApplication from "../domain/Application";
 import DBContext from "../infrastructure/database/DBContext";
 import MailContext from "../infrastructure/nodemailer/MailContext";
@@ -8,6 +8,9 @@ import UserService from "../use-case/user.service";
 import * as cors from 'cors'
 
 import "./controllers/user.controller";
+import "./controllers/video.controller";
+import VideoRepository from "../repository/video.repository";
+import VideoService from "../use-case/video.service";
 class App extends BaseApplication {
     protected app: Application;
 
@@ -20,6 +23,8 @@ class App extends BaseApplication {
         this.container.bind(UserRepository).toSelf()
         this.container.bind(UserService).toSelf()
 
+        this.container.bind(VideoRepository).toSelf()
+        this.container.bind(VideoService).toSelf()
     }
 
     async setup() {
@@ -33,7 +38,16 @@ class App extends BaseApplication {
                 .use(urlencoded({ extended: true }))
                 .use(cors())
         })
+        server.setErrorConfig((app) => {
+            app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+                console.log(error)
+                if (!!error) return res.status(500).json({
+                    error: error.message
+                })
+                next()
+            })
 
+        })
         this.app = server.build()
         const port = process.env.PORT || 3031
         this.app.listen(port, () => {

@@ -3,39 +3,36 @@ import { Request, Response } from "express";
 import { BaseHttpController, controller, httpDelete, httpGet, httpPost, httpPut, requestBody, requestParam } from "inversify-express-utils";
 import CreateUserDto from "../../use-case/dtos/user/create-user-request.dto";
 import UserService from "../../use-case/user.service";
+import VideoService from "../../use-case/video.service";
+import UploadFileMiddleware from "../middleware/UploadFileMiddleware";
 import { ValidateRequestMiddleware } from "../middleware/ValidateRequestMiddleware";
 
-@controller("/api/users")
-class UserController extends BaseHttpController {
+@controller("/api/video")
+class VideoController extends BaseHttpController {
 
-    constructor(private readonly _userService: UserService) {
+    constructor(private readonly _videoService: VideoService) {
         super()
     }
 
 
     @httpGet("/")
     public async getAll() {
-        const result = await this._userService.all()
+        const result = await this._videoService.all()
         return this.json(result)
     }
 
-    @httpPost("/", ValidateRequestMiddleware.with(CreateUserDto))
+    @httpPost("/", UploadFileMiddleware.with())
     private async store(req: Request) {
-        const result = await this._userService.create(req.body)
+        const result = await this._videoService.create(req.body)
         return this.json(result)
     }
 
     @httpDelete("/:id")
     private async destroy(req: Request) {
         const id = Number(req.params.id);
-        const result = await this._userService.delete(id);
+        const result = await this._videoService.delete(id);
         return this.json(result);
-    }
-    @httpPut("/:id")
-    private async update(@requestParam("id") id: number, @requestBody() body) {
-        const result = await this._userService.update(Number(id), body)
-        return result
     }
 }
 
-export default UserController
+export default VideoController
