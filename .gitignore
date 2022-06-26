@@ -6,4 +6,6 @@ dist/
 tmp/
 temp/
 .env
-upload/*
+
+upload/**/*
+!upload/**/.gitkeep
