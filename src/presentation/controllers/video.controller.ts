@@ -20,7 +20,14 @@ class VideoController extends BaseHttpController {
         const result = await this._videoService.all()
         return this.json(result)
     }
-
+    @httpGet("/:id/stream")
+    private async streaming(req: Request) {
+        const { id } = req.params
+        console.log(id)
+        return this.json({
+            data: id
+        })
+    }
     @httpPost("/", UploadFileMiddleware.with())
     private async store(req: Request) {
         const result = await this._videoService.create(req.body)
