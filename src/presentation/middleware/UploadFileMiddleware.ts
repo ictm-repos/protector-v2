@@ -2,13 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import * as multer from 'multer'
 import BaseMiddleware from "../../domain/BaseMiddleware";
 import * as path from 'path'
+import { callbackify } from "util";
 class UploadFileMiddleware extends BaseMiddleware {
 
     public execute(req: Request, res: Response, next: NextFunction): void | Promise<void> {
-        console.log(req.body)
-        console.log(process.cwd())
         const uploadPath = path.join(process.cwd(), "upload")
-        console.log(uploadPath)
         const storage = multer.diskStorage({
             destination: function (req, file, cb) {
                 cb(null, uploadPath)
@@ -23,14 +21,25 @@ class UploadFileMiddleware extends BaseMiddleware {
                 cb(null, destination)
             }
         })
-        const upload = multer({ storage: storage })
+        const upload = multer({
+            storage: storage,
+            fileFilter: this.fileFilter
+        })
         return upload.single("video")(req, res, next)
     }
-
+    fileFilter(req: Request, file: Express.Multer.File, callback: multer.FileFilterCallback) {
+        const allowedFiles = [
+            "video/mp4"
+        ]
+        if (allowedFiles.includes(file.mimetype))
+            callback(null, true);
+        else
+            callback(new Error("This file is not supported"));
+    }
     static with() {
-        return new UploadFileMiddleware().execute
+        return new UploadFileMiddleware().execute;
     }
 }
 
-export default UploadFileMiddleware
+export default UploadFileMiddleware;
 
