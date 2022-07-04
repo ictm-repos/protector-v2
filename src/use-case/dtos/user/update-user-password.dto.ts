@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 
-class CreateUserDto {
+class UpdateUserPassword {
     // const user: User
     constructor(
         public readonly email: string,
@@ -11,8 +11,8 @@ class CreateUserDto {
         // public readonly
     ) {
     }
-    static from(body: Partial<CreateUserDto>) {
-        return new CreateUserDto(
+    static from(body: Partial<UpdateUserPassword>) {
+        return new UpdateUserPassword(
             body.email,
             body.firstname,
             body.lastname,
@@ -22,4 +22,4 @@ class CreateUserDto {
     }
 }
 
-export default CreateUserDto
+export default UpdateUserPassword

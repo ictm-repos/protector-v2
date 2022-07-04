@@ -1,4 +1,5 @@
 import { User } from "@prisma/client";
+import { BadRequest } from "../../../domain/Exceptions/BadRequest";
 
 class RegisterUserDto {
     // const user: User
@@ -15,7 +16,7 @@ class RegisterUserDto {
     static from(body: Partial<RegisterUserDto>) {
         console.log(body)
         if (!body.email) {
-            throw new Error("Email is doesn't exist")
+            throw new BadRequest("Email is doesn't exist")
         }
 
         return new RegisterUserDto(

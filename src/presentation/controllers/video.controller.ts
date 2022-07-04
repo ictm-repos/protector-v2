@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import * as fs from 'fs'
 import { BaseHttpController, controller, httpDelete, httpGet, httpPost, httpPut, requestBody, requestParam } from "inversify-express-utils";
 import { AuthenticatedRequest } from "../../domain/AuthenticatiedRequest";
+import { BadRequest } from "../../domain/Exceptions/BadRequest";
 import CreateUserDto from "../../use-case/dtos/user/create-user-request.dto";
 import UserService from "../../use-case/user.service";
 import VideoService from "../../use-case/video.service";
@@ -17,14 +18,14 @@ class VideoController extends BaseHttpController {
         super()
     }
 
-
     @httpGet("/", CheckAuthMiddleware.with())
     public async getAll() {
         const result = await this._videoService.all()
         return this.json(result)
     }
 
-    @httpGet("/:id/by-user", CheckAuthMiddleware.with())
+    // This is Available for Admins
+    @httpGet("/my-videos", CheckAuthMiddleware.with())
     private async getByUserId(req: AuthenticatedRequest) {
         const videos = await this._videoService.getVideosByUserId(req.user.id);
         return this.json({
@@ -37,7 +38,7 @@ class VideoController extends BaseHttpController {
         const { id } = req.params
         const range = req.headers.range;
         if (!range) {
-            res.status(400).send("Requires Range header");
+            throw new BadRequest("This request is not supported")
         }
         const result = await this._videoService.getById(Number(id))
         const videoPath = result.destination;
@@ -57,19 +58,17 @@ class VideoController extends BaseHttpController {
         return videoStream.pipe(res);
     }
     @httpPost("/", CheckAuthMiddleware.with(), UploadFileMiddleware.with())
-    private async store(req: Request) {
+    private async store(req: AuthenticatedRequest) {
         const result = await this._videoService.create(req.body)
         return this.json(result)
     }
 
-    @httpDelete("/:id")
-    private async destroy(req: Request) {
+    @httpDelete("/:id", CheckAuthMiddleware.with())
+    private async destroy(req: AuthenticatedRequest) {
         const id = Number(req.params.id);
         const result = await this._videoService.delete(id);
         return this.json(result);
     }
-
-
 }
 
 export default VideoController

@@ -6,6 +6,8 @@ import { RegisterDto } from "./dtos/AuthDto";
 import LoginUserDto from "./dtos/auth/login-user.dto";
 import CreateUserDto from "./dtos/user/create-user-request.dto";
 import * as jwt from "jsonwebtoken"
+import { BadRequest } from "../domain/Exceptions/BadRequest";
+import { NotFound } from "../domain/Exceptions/NotFound";
 
 
 
@@ -16,12 +18,12 @@ class AuthService {
     async login(loginUserDto: LoginUserDto) {
         const user = await this._userService.getByEmail(loginUserDto.email)
         if (!user) {
-            throw new Error("This email not found")
+            throw new NotFound("This email not found")
         }
 
         const isValid = await compareHash(loginUserDto.password, user.password);
         if (!isValid) {
-            throw new Error("Login or user incorrect");
+            throw new BadRequest("Login or user incorrect");
         }
         const { email, firstname, lastname, phone, id } = user
         const payload = { email, firstname, lastname, phone, id }

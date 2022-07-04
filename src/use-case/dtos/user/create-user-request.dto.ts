@@ -1,4 +1,5 @@
 import { User } from "@prisma/client";
+import { BadRequest } from "../../../domain/Exceptions/BadRequest";
 
 class CreateUserDto {
     // const user: User
@@ -13,19 +14,19 @@ class CreateUserDto {
     }
     static from(body: Partial<CreateUserDto>) {
         if (!body.email) {
-            throw new Error("Email is not provided")
+            throw new BadRequest("Email is not provided")
         }
 
         if (!body.firstname) {
-            throw new Error("Firstname is not provided")
+            throw new BadRequest("Firstname is not provided")
         }
 
         if (!body.password) {
-            throw new Error("Password is not provided")
+            throw new BadRequest("Password is not provided")
         }
 
         if (!body.phone) {
-            throw new Error("Password is not provided")
+            throw new BadRequest("Password is not provided")
         }
 
         return new CreateUserDto(
