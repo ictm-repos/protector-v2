@@ -21,6 +21,7 @@ class VideoRepository {
     }
 
     async create(entity: Partial<Video>): Promise<Video> {
+        console.log(entity)
         const created = await this._dbContext.video.create({
             data: <Video>entity
         })
@@ -45,6 +46,15 @@ class VideoRepository {
         })
 
         return updated
+    }
+
+    async getVideoByUserId(id: number): Promise<Video[]> {
+        const videos = await this._dbContext.video.findMany({
+            where: {
+                ownerId: id
+            }
+        })
+        return videos
     }
 }
 

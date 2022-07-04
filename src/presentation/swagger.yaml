@@ -1,0 +1,98 @@
+openapi: 3.0.0
+info:
+  title: Video protector API
+  description: Videolarni xavfsiz saqlash va xavfsiz ruhsat berishni amalga oshiruvchi xizmat
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081/api
+    description: local server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT # optional, for documentation purposes only
+  schemas:
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        phone:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+
+# Paths initialization
+paths:
+  /auth/login:
+    post:
+      summary: Login user
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '404':
+          description: Email not found
+        '200': # status code
+          description: Get toke with access token
+  /auth/register:
+    post:
+      summary: Login user
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '400':
+          description: Bad request
+        '200': # status code
+          description: user registrated successfully
+
+  /users:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Foydalanuvchilar ro'yxatini olish
+      # description:
+      responses:
+        '200': # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /video:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Barcha videolarni olish
+      responses:
+        '200': # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string

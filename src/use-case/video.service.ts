@@ -16,6 +16,10 @@ class VideoService {
         return result
     }
 
+    async getById(id: number): Promise<Video> {
+        const result = await this._videoRepo.getById(id)
+        return result
+    }
     async create(createUserDto: any): Promise<Video> {
         const result = await this._videoRepo.create(createUserDto)
         return result
@@ -23,6 +27,11 @@ class VideoService {
 
     async delete(id: number): Promise<Video> {
         const result = await this._videoRepo.delete(id)
+        return result
+    }
+
+    async getVideosByUserId(id: number): Promise<Video[]> {
+        const result = await this._videoRepo.getVideoByUserId(id)
         return result
     }
 }

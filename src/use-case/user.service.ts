@@ -28,22 +28,19 @@ class UserService {
 
 
     async create(createUserDto: CreateUserDto): Promise<User> {
-        createUserDto.password = await hashString(createUserDto.password)
-        const result = await this._userRepo.create(createUserDto)
-        return result
+        createUserDto.password = await hashString(createUserDto.password);
+        const result = await this._userRepo.create(createUserDto);
+        return result;
     }
 
     async delete(id: number): Promise<User> {
-        const result = await this._userRepo.delete(id)
-        return result
+        const result = await this._userRepo.delete(id);
+        return result;
     }
 
     async update(id: number, data: User): Promise<User> {
-        const result = await this._userRepo.update(id, data)
-        return result
-    }
-    async changePassword(id: number) {
-
+        const result = await this._userRepo.update(id, data);
+        return result;
     }
 }
 

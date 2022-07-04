@@ -6,5 +6,6 @@ declare namespace NodeJS {
         REDIS_URI: string;
         MAIL_USER: string;
         MAIL_PASS: string;
+        JWT_SECRET: string;
     }
 }

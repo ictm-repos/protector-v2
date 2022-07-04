@@ -1,5 +1,6 @@
 import { Application, json, NextFunction, Request, Response, urlencoded } from "express";
 import { InversifyExpressServer, next } from "inversify-express-utils";
+import * as swaggerUi from "swagger-ui-express"
 import BaseApplication from "../domain/Application";
 import DBContext from "../infrastructure/database/DBContext";
 import MailContext from "../infrastructure/nodemailer/MailContext";
@@ -9,8 +10,12 @@ import * as cors from 'cors'
 
 import "./controllers/user.controller";
 import "./controllers/video.controller";
+import "./controllers/auth.controller";
 import VideoRepository from "../repository/video.repository";
 import VideoService from "../use-case/video.service";
+import AuthService from "../use-case/auth.service";
+
+import docsRouter from './controllers/docs.controller'
 class App extends BaseApplication {
     protected app: Application;
 
@@ -18,6 +23,7 @@ class App extends BaseApplication {
         // Dependency injection container
         this.container.bind(DBContext).toSelf()
         this.container.bind(MailContext).toSelf()
+        this.container.bind(AuthService).toSelf()
 
 
         this.container.bind(UserRepository).toSelf()
@@ -37,6 +43,7 @@ class App extends BaseApplication {
             app.use(json())
                 .use(urlencoded({ extended: true }))
                 .use(cors())
+                .use(docsRouter)
         })
         server.setErrorConfig((app) => {
             app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
@@ -48,6 +55,7 @@ class App extends BaseApplication {
             })
 
         })
+
         this.app = server.build()
         const port = process.env.PORT || 3031
         this.app.listen(port, () => {

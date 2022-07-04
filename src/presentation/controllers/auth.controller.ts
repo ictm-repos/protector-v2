@@ -16,12 +16,15 @@ class AuthController extends BaseHttpController {
     @httpPost("/login", ValidateRequestMiddleware.with(LoginUserDto))
     async login(req: Request) {
         const token = await this._authService.login(req.body)
-        return token
+        return this.json({
+            access_token: token
+        })
     }
 
     @httpPost("/register", ValidateRequestMiddleware.with(CreateUserDto))
-    async register(@requestBody() body: RegisterDto) {
-        const result = await this._authService.register(body)
+    async register(req: Request) {
+        console.log("registyer")
+        const result = await this._authService.register(req.body)
         return this.json(result)
     }
 }

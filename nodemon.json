@@ -1,6 +1,6 @@
 {
   "watch": ["src", "env.d.ts"],
-  "ext": ".ts,.js,.prisma",
+  "ext": ".ts,.js,.prisma, .yaml",
   "ignore": [],
   "exec": "ts-node ./src/index.ts"
 }
