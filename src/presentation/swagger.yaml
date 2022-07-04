@@ -4,7 +4,7 @@ info:
   description: Videolarni xavfsiz saqlash va xavfsiz ruhsat berishni amalga oshiruvchi xizmat
   version: 1.0.0
 servers:
-  - url: http://localhost:8081/api
+  - url: http://localhost:8080/api
     description: local server
 
 components:
@@ -90,6 +90,44 @@ paths:
       responses:
         '200': # status code
           description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+    post:
+      security:
+        - bearerAuth: []
+      summary: Video qo'shish
+      requestBody:
+        description: Video body qismi
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                video:
+                  type: string
+                  format: binary
+      responses:
+        '400':
+          description: Videoda xatolik bor
+        '200':
+          description: Video muvaffaqiyatli yuklandi
+  /video/my-videos:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Foydalanuvchi o'ziga tegishli videolarni olish
+      responses:
+        '200': # status code
+          description: Videolar massivi qaytariladi
           content:
             application/json:
               schema:

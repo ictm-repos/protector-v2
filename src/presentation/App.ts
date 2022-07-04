@@ -16,6 +16,7 @@ import VideoService from "../use-case/video.service";
 import AuthService from "../use-case/auth.service";
 
 import docsRouter from './controllers/docs.controller'
+import errorHandler from "./middleware/ErrorHandlerMiddleware";
 class App extends BaseApplication {
     protected app: Application;
 
@@ -46,14 +47,7 @@ class App extends BaseApplication {
                 .use(docsRouter)
         })
         server.setErrorConfig((app) => {
-            app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
-                console.log(error)
-                if (!!error) return res.status(500).json({
-                    error: error.message
-                })
-                next()
-            })
-
+            app.use(errorHandler)
         })
 
         this.app = server.build()

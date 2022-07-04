@@ -4,6 +4,7 @@ import BaseMiddleware from "../../domain/BaseMiddleware";
 import * as path from 'path'
 import { callbackify } from "util";
 import { AuthenticatedRequest } from "../../domain/AuthenticatiedRequest";
+import { BadRequest } from "../../domain/Exceptions/BadRequest";
 class UploadFileMiddleware extends BaseMiddleware {
 
     public execute(req: AuthenticatedRequest, res: Response, next: NextFunction): void | Promise<void> {
@@ -36,7 +37,7 @@ class UploadFileMiddleware extends BaseMiddleware {
         if (allowedFiles.includes(file.mimetype))
             callback(null, true);
         else
-            callback(new Error("This file is not supported"));
+            callback(new BadRequest("This file is not supported"));
     }
     static with() {
         return new UploadFileMiddleware().execute;

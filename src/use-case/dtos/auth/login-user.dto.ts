@@ -1,4 +1,5 @@
 import { User } from "@prisma/client";
+import { BadRequest } from "../../../domain/Exceptions/BadRequest";
 
 class LoginUserDto {
     constructor(
@@ -8,10 +9,10 @@ class LoginUserDto {
     }
     static from(body: Partial<LoginUserDto>) {
         if (!body.email) {
-            throw new Error("Email is not provided")
+            throw new BadRequest("Email is not provided")
         }
         if (!body.password) {
-            throw new Error("Password is not provided")
+            throw new BadRequest("Password is not provided")
         }
         return new LoginUserDto(
             body.email,
