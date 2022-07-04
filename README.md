@@ -12,20 +12,8 @@ Loyihada ishlatiladigan buyruqlar
 
 ---
 
+## Get more info for API: `/docs`
 
-```
-Project structure 
-|------- domain
-|------- infrastructure
-|   |------- database
-|   |------- redis
-|   |------- Nodemailer(Email)
-|------- repository 
-|------- presentation
-|------- use-case
-|------- utils
-|------- index.ts
-```
 ---
 
 ![Clean architecture image](https://miro.medium.com/max/1400/1*0u-ekVHFu7Om7Z-VTwFHvg.png)
