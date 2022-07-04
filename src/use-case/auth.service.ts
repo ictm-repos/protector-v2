@@ -5,7 +5,7 @@ import UserService from "./user.service";
 import { RegisterDto } from "./dtos/AuthDto";
 import LoginUserDto from "./dtos/auth/login-user.dto";
 import CreateUserDto from "./dtos/user/create-user-request.dto";
-
+import * as jwt from "jsonwebtoken"
 
 
 
@@ -23,8 +23,10 @@ class AuthService {
         if (!isValid) {
             throw new Error("Login or user incorrect");
         }
-
-        return user.password;
+        const { email, firstname, lastname, phone, id } = user
+        const payload = { email, firstname, lastname, phone, id }
+        const token = jwt.sign(payload, process.env.JWT_SECRET)
+        return token;
     }
 
     async register(createUserDto: CreateUserDto) {
